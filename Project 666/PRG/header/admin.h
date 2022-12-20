@@ -52,7 +52,7 @@ void pilihan()
     {
         case 1 : BersihSemuaLayar(); CreateMobil(); break;
         case 2 : BersihSemuaLayar(); UpdateMobil(); break;
-        case 3 : BersihSemuaLayar(); break;
+        case 3 : BersihSemuaLayar(); DeleteMobil(); break;
         case 4 : BersihSemuaLayar(); AdminMenu(); break;
         case 5 : BersihSemuaLayar(); LoginForm(); break;
     }
@@ -114,16 +114,16 @@ void ReadMobil()
     fread(&dMobil, sizeof(dMobil), 1, fp);
 
     fflush(stdin);
-	gotoPrint("Kode", 34, 15);
+	gotoPrint("Kode", 35, 15);
 	gotoPrint("Merk", 44, 15);
 	gotoPrint("Nama", 60, 15);
-	gotoPrint("Harga", 84, 15);
-	gotoPrint("---------------------------------------------------------------", 34, 16);
+	gotoPrint("Harga", 83, 15);
+	gotoPrint("---------------------------------------------------------------", 35, 16);
 	i= 17;
 	while (!feof(fp))
 	{
 		fflush(stdin);
-		gotoxy(34,i); printf("MBL%d",dMobil.kd_mobil);
+		gotoxy(35,i); printf("MBL%d",dMobil.kd_mobil);
 		gotoxy(43,i); printf("%s",dMobil.merk_mobil);
 		gotoxy(59,i); printf("%s",dMobil.nama_mobil);
 		gotoxy(79,i); printf("Rp "); RP(dMobil.harga_mobil);
@@ -137,7 +137,133 @@ void ReadMobil()
 
 void UpdateMobil()
 {
+    DesainUtama();
+    PrintFile("logo/tulisan-mobil.txt", 74, 3);
+    gotoPrint("========================= Update Mobil =========================", 35, 12);
 
+    FILE *TEMP;
+    bool found;
+    int a, kode;
+    char nama[20];
+
+    fp = fopen("file/Mobil.dat", "rb");
+    TEMP = fopen("file/MobilTemp.dat", "wb");
+
+    gotoxy(35, 14); printf("Masukkan Kode Mobil Yang Ingin Diupdate : MBL");
+    getnum(&kode, 4);
+    found = false;
+
+    if(kode == 0)
+    {
+    	BersihSemuaLayar();
+    	MobilMenu();
+	}
+	else if(kode != 0)
+	{
+        while(!found && !feof(fp))
+	    {
+	        fread(&dMobil, sizeof(dMobil), 1, fp);
+	        if(dMobil.kd_mobil == kode)
+	        {
+	            found = true;
+	        }
+	        else
+	        {
+	            fwrite(&dMobil, sizeof(dMobil), 1, TEMP);
+	        }
+	    }
+
+	    if(found == true)
+	    {
+	        gotoxy(35,17); printf("Kode  : MBL%d",dMobil.kd_mobil);
+			gotoxy(35,18); printf("Merk  : %s",dMobil.merk_mobil);
+			gotoxy(35,19); printf("Nama  : %s",dMobil.nama_mobil);
+			gotoxy(35,20); printf("Harga : Rp "); RP(dMobil.harga_mobil);
+
+			gotoPrint("-----Masukkan Data Mobil Tebaru-----", 35, 22);
+	        gotoPrint("Masukkan Merk Mobil  : ", 35, 23); fflush(stdin); takeInput(&dMobil.merk_mobil);
+	        gotoPrint("Masukkan Nama Mobil  : ", 35, 24); fflush(stdin); takeInput(&dMobil.nama_mobil);
+	        gotoPrint("Masukkan Harga Mobil : Rp ", 35, 25); fflush(stdin); getRp(&dMobil.harga_mobil, 1, 20, 61, 25);
+
+	        fwrite(&dMobil,sizeof(dMobil),1,TEMP);
+	        fread(&dMobil,sizeof(dMobil),1,fp);
+
+	        while(!feof(fp))
+	        {
+	            fwrite(&dMobil,sizeof(dMobil),1,TEMP);
+	            fread(&dMobil,sizeof(dMobil),1,fp);
+	        }
+	        fclose(fp);
+	        fclose(TEMP);
+	        remove("file/Mobil.dat");
+	        rename("file/MobilTemp.dat", "file/Mobil.dat");
+	        MessageBox(NULL, "DATA BERHASIL DIUBAH", "SUCCESS", MB_OK | MB_ICONINFORMATION | MB_DEFAULT_DESKTOP_ONLY);
+	        BersihSemuaLayar();
+	        MobilMenu();
+	    }
+	    else
+        {
+            MessageBox(NULL, "DATA MOBIL TIDAK ADA", "INFORMATION", MB_OK | MB_ICONINFORMATION | MB_DEFAULT_DESKTOP_ONLY);
+            BersihSemuaLayar();
+            UpdateMobil();
+        }
+	}
+}
+
+void DeleteMobil()
+{
+    DesainUtama();
+    PrintFile("logo/tulisan-mobil.txt", 74, 3);
+    gotoPrint("========================= Update Mobil =========================", 35, 12);
+
+    FILE *TEMP;
+    bool found;
+    int kode;
+
+    fp = fopen("file/Mobil.dat", "rb");
+    TEMP = fopen("file/MobilTemp.dat", "wb");
+
+    gotoxy(35, 14); printf("Masukkan Kode Mobil Yang Ingin Dihapus : MBL");
+    getnum(&kode, 4);
+    found = false;
+
+    fread(&dMobil, sizeof(dMobil), 1, fp);
+    while(!found && !feof(fp))
+    {
+        if(dMobil.kd_mobil == kode)
+        {
+            found = true;
+        }
+        else
+        {
+            fwrite(&dMobil, sizeof(dMobil), 1, TEMP);
+            fread(&dMobil, sizeof(dMobil), 1, fp);
+        }
+    }
+
+    if(found == true)
+    {
+        fread(&dMobil, sizeof(dMobil), 1, fp);
+        while(!feof(fp))
+        {
+            fwrite(&dMobil, sizeof(dMobil), 1, TEMP);
+            fread(&dMobil, sizeof(dMobil), 1, fp);
+        }
+    }
+    else
+    {
+        MessageBox(NULL, "DATA MOBIL TIDAK ADA", "INFORMATION", MB_OK | MB_ICONINFORMATION | MB_DEFAULT_DESKTOP_ONLY);
+        BersihSemuaLayar();
+        MobilMenu();
+    }
+    fclose(TEMP);
+    fclose(fp);
+
+    remove("file/Mobil.dat");
+    rename("file/MobilTemp.dat", "file/Mobil.dat");
+    MessageBox(NULL, "DATA BERHASIL DIHAPUS", "SUCCESS", MB_OK | MB_ICONINFORMATION | MB_DEFAULT_DESKTOP_ONLY);
+    BersihSemuaLayar();
+    MobilMenu();
 }
 
 /*void CreateUser()
