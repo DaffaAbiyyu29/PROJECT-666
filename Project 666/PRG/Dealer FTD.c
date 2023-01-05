@@ -1,3 +1,4 @@
+//LIBRARY
 #include <stdio.h>
 #include <conio.h>
 #include <time.h>
@@ -5,13 +6,18 @@
 #include <windows.h>
 #include <string.h>
 
-
+//FILE HEADER
 #include "header/login.h"
 #include "header/design.h"
 #include "header/menu.h"
 #include "header/admin.h"
+#include "header/CRUDmobil.h"
+#include "header/CRUDuser.h"
+#include "header/CRUDcustomer.h"
 #include "header/manager.h"
-#include "header/kasir.h"
+#include "header/sales counter.h"
+#include "header/leasing.h"
+#include "header/transaksi.h"
 
 main()
 {
@@ -20,16 +26,11 @@ main()
 	system("color 03");
 
 	MainFrame();
-	/*PrintFile("logo/logo-dealer.txt", 36, 3);
-    PrintFile("logo/mobil.txt", 47, 17);
-    loading(69, 33);
-	gotoxy(72, 37);printf("Tekan apapun untuk mulai!");
-	getch();
-    BersihSemuaLayar();*/
 
     LoginForm();
     //AdminMenu();
-    //MainFrame();
+    //KasirMenu();
+    //ManagerMenu();
     BersihSemuaLayar();
-    //DesainUtama();MainMenu
+    //DesainUtama();
 }
