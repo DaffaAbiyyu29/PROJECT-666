@@ -10,6 +10,39 @@ int delay(int i)
      return(i);
 }
 
+void takeInput(char ch[50])
+{
+    fgets(ch, 50, stdin);
+    ch[strlen(ch) - 1] = 0;
+}
+
+void takePassword(char pwds[50])
+{
+    int is;
+    char chs;
+
+    while(1)
+    {
+        chs = getch();
+        if (chs == ENTER || chs == TAB)
+        {
+            pwds[is] = '\0';
+            break;
+        } else if (chs == BCKSPC)
+        {
+            if (is > 0)
+            {
+                is--;
+                printf("\b \b");
+            }
+        } else
+        {
+            pwds[is++] = chs;
+            printf("* \b");
+        }
+    }
+}
+
 void getallinput(char input[], int min, int max, int type)
 {
 	char inpkey;

@@ -12,39 +12,6 @@ char jbt3[20] = "Kasir";
 
 FILE *fp;*/
 
-void takeInput(char ch[50])
-{
-    fgets(ch, 50, stdin);
-    ch[strlen(ch) - 1] = 0;
-}
-
-void takePassword(char pwds[50])
-{
-    int is;
-    char chs;
-
-    while(1)
-    {
-        chs = getch();
-        if (chs == ENTER || chs == TAB)
-        {
-            pwds[is] = '\0';
-            break;
-        } else if (chs == BCKSPC)
-        {
-            if (is > 0)
-            {
-                is--;
-                printf("\b \b");
-            }
-        } else
-        {
-            pwds[is++] = chs;
-            printf("* \b");
-        }
-    }
-}
-
 void LoginForm()
 {
     char username[30], password[30];
@@ -87,12 +54,17 @@ void LoginForm()
 	        MessageBox(NULL, "LOGIN SUCCESSFULY", "SUCCESS", MB_OK | MB_ICONINFORMATION | MB_DEFAULT_DESKTOP_ONLY);
 	        BersihSemuaLayar();
 	        ManagerMenu();
-	    } else if ((strcmp(username, "kasir") == 0) && (strcmp(password, "kasir") == 0))
+	    } else if ((strcmp(username, "sales") == 0) && (strcmp(password, "sales") == 0))
 	    {
 	        MessageBox(NULL, "LOGIN SUCCESSFULY", "SUCCESS", MB_OK | MB_ICONINFORMATION | MB_DEFAULT_DESKTOP_ONLY);
 	        BersihSemuaLayar();
-	        KasirMenu();
-	    } else {
+	        SCMenu();
+	    } else if ((strcmp(username, "kreditur") == 0) && (strcmp(password, "kreditur") == 0))
+	    {
+	        MessageBox(NULL, "LOGIN SUCCESSFULY", "SUCCESS", MB_OK | MB_ICONINFORMATION | MB_DEFAULT_DESKTOP_ONLY);
+	        BersihSemuaLayar();
+	        LeasingMenu();
+	    }else {
 	        Beep(800,300);
 	        MessageBox(NULL, "USERNAME ATAU PASSWORD SALAH", "WARNING", MB_OK | MB_ICONWARNING | MB_DEFAULT_DESKTOP_ONLY);
 	        BersihSemuaLayar();

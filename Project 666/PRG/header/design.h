@@ -9,38 +9,6 @@ void fullscreen()
 	keybd_event(VK_MENU,0x38,KEYEVENTF_KEYUP,0);
 }
 
-void Border()
-{
-	//DECLARATION
-	int i,j;
-
-	//ALGORITM
-	gotoxy(0,0); printf("\xc9");			//sudut siku-siku kiri atas
-	for(i=1; i<=172; i++)
-	{
-		gotoxy(i,0); printf("\xcd");		//garis horizontal
-	}
-	gotoxy(i,0); printf("\xbb");			//sudut siku-siku kanan atas
-
-	for(j=1; j<=48; j++)
-	{
-		gotoxy(173,j); printf("\xba");		//garis vertikal
-	}
-
-	for(j=1; j<=48; j++)
-	{
-		gotoxy(0,j); printf("\xba");		//garis vertikal
-	}
-	gotoxy(0,j); printf("\xc8");			//sudut siku-siku kanan bawah
-
-	for(i=1; i<=172; i++)
-	{
-		gotoxy(i,j); printf("\xcd");		//garis horizontal
-	}
-	gotoxy(i,j); printf("\xbc");			//sudut siku-siku kiri bawah
-
-}
-
 void gotoxy(int x, int y)
 {
 	COORD coord;
@@ -133,7 +101,7 @@ void BersihSemuaLayar ()
 	//ALGORITM
 	for (i=0; i<= 175; i++)
 	{
-		for(j=0; j <= 50; j++)
+		for(j=0; j <= 43; j++)
 		{
 			gotoxy(i,j); printf(" ");
 		}
@@ -142,18 +110,18 @@ void BersihSemuaLayar ()
 
 void copyright()
 {
-    PrintFile("logo/copyright.txt", 4, 39);
+    PrintFile("logo/copyright.txt", 4, 37);
 }
 
 void MainFrame()
 {
 	 /* DECLARATION : */
     int i, j;
-    
+
 	 /* ALGORITHM : */
     system("color 03");
     //garis kiri, kanan, tengah
-    for(i=0;i<=45;i++)
+    for(i=0;i<=43;i++)
     {
         gotoxy(1,i),printf("%c%c",219,219);//kiri
         gotoxy(169,i),printf("%c%c",219,219);//kanan
@@ -165,12 +133,8 @@ void MainFrame()
 	{
     gotoxy(i,0),	printf("%c%c",219,219); //atas
     gotoxy(i,10),	printf("%c",219); //tengah
-    gotoxy(i,45),	printf("%c",219); //bawah
+    gotoxy(i,43),	printf("%c",219); //bawah
 	}
-
-
-
-		//DrawFile(103, 23, "text/tahun.txt");
 }
 
 void DesainUtama()
@@ -180,11 +144,11 @@ void DesainUtama()
 	time_t t = time(NULL);
 	struct tm tm = * localtime(&t);
 	gotoxy(11, 12); printf("%d/%d/%d", tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
-	
+
 	PrintFile("logo/DFTD.txt", 8, 5);
 
 	//garis kiri, kanan, tengah
-	for(i=0;i<=45;i++)
+	for(i=0;i<=43;i++)
 	{
 		gotoxy(1,i),printf("%c%c",219,219);//kiri
 		gotoxy(169,i),printf("%c%c",219,219);//kanan
@@ -207,30 +171,148 @@ void DesainUtama()
 	{
 		gotoxy(i,0),	printf("%c%c",219,219); //atas
 		gotoxy(i,10),	printf("%c",219); //tengah
-		gotoxy(i,45),	printf("%c",219); //bawah
+		gotoxy(i,43),	printf("%c",219); //bawah
 	}
 }
 
-/*void MenuUtama()
-{
-    Border();
-    copyright();
+void underline(char text[255], int x, int y) {
+	int i;
 
-    PrintFile("logo/logo-dealer.txt", 37, 10);
+	gotoxy(x, y);
+	printf("%s", text);
+	for(i = 0; i < strlen(text); i++) {
+		gotoxy(x+i, y+1);
+		printf("%c", 196);
+	}
+}
 
-    gotoPrint("Pilih Tindakan :", 76, 30);
-	gotoPrint("1. Daftar", 76, 31);
-	gotoPrint("2. Masuk", 76, 32);
-	gotoPrint("0. Keluar", 76, 33);
-	gotoPrint("[", 79, 34); gotoPrint("]", 81, 34);
-	gotoxy(80, 34); scanf("%d", &pilih);
-
-	switch(pilih)
+void textbox(int last, int a, int b,int c, int d){
+	int i;
+	for(i=0;i<last;i++)
 	{
-		case 1 : BersihSemuaLayar(); SignupForm(); break;
-		case 2 : BersihSemuaLayar(); LoginForm(); break;
-		case 0 : MessageBox(NULL, "Terimakasih sudah menggunakan aplikasi ini"," ATTENTION ", MB_OK | MB_ICONINFORMATION | MB_DEFAULT_DESKTOP_ONLY); exit(0); break;
-		default : MessageBox(NULL, "ANGKA TIDAK VALID", "WARNING", MB_OK | MB_ICONINFORMATION | MB_DEFAULT_DESKTOP_ONLY);
+	Vline(a,b,c,186);
+	Vline(a,b,d,186);
+	Hline(c,d,a,205);
+	Hline(c,d,b,205);
+	gotoxy(c,a);printf("%c",201);
+	gotoxy(d,a);printf("%c",187);
+	gotoxy(c,b);printf("%c",200);
+	gotoxy(d,b);printf("%c",188);
+	a+=3;
+	b+=3;
+	}
+}
+
+/*void textBox2(int x, int y, int width, int height) {
+	int i, j;
+
+	//first Line
+	gotoxy(x, y);
+	printf("%c", 201);
+	for(i = 1; i <= width; i++) {
+		printf("%c", 205);
+	}
+	printf("%c", 187);
+
+	//looping for height
+	for(i = 1; i <= height; i++) {
+		gotoxy(x, y + i);
+		printf("%c", 186);
+		for(j = 1; j <= width; j++) {
+			printf(" ");
+		}
+		gotoxy(x + width + 1, y + i);
+		printf("%c", 186);
 	}
 
+	//last line
+	printf("\n");
+	gotoxy(x, y + height);
+	printf("%c", 200);
+	for(i = 1; i <= width; i++) {
+		printf("%c", 205);
+	}
+	printf("%c", 188);
 }*/
+
+void BoxBlock(int x, int y, int width, int height, int color) {
+	int i, j;
+
+	/* first Line */
+	SetColorBlock(color);
+	for(i = 0; i <= height; i++) {
+		for(j = 0; j < width; j++) {
+			gotoxy(x + j, y + i);
+			printf("%c", 219);
+		}
+	}
+}
+
+void chooseBox(int x, int y, int width, int height) { //[]
+	int i, j;
+
+	/* first Line */
+	gotoxy(x, y);
+	printf("%c", 201);
+	for(i = 1; i <= width; i++) {
+		printf("%c", 205);
+	}
+	printf("%c", 187);
+
+	/* last line */
+	printf("\n");
+	gotoxy(x, y + height);
+	printf("%c", 200);
+	for(i = 1; i <= width; i++) {
+		printf("%c", 205);
+	}
+	printf("%c", 188);
+}
+
+void textAreaInput(char input[], int min, int max, int x, int y, int maxOneLine)
+{
+	char inpkey;
+	int i,n,m, oneline;
+	oneline = maxOneLine;
+	n = 0;
+	do
+	{
+		inpkey = getch();  // membaca masukan dari keyboard per-karakter //
+
+//---- Menghapus Input ----//
+		if(inpkey == '\b' && n != 0)
+		{
+			if(n == oneline-maxOneLine) {
+				oneline -= maxOneLine;
+				y--;
+				gotoxy(x+maxOneLine, y);
+			}
+			printf("\b \b");
+			input[n]='\0';
+			n--;
+		} else if(isprint(inpkey)){ //karakter yang bisa di print
+			if(n == max) {
+				continue;
+			}
+			else {
+				if(n == oneline) {
+					oneline += maxOneLine;
+					y++;
+					gotoxy(x, y);
+				}
+				printf("%c", inpkey);
+				input[n]=inpkey;
+				n++;
+			}
+		}
+		else if(inpkey == 13)
+		{
+			if(n < min) {
+				printf("\a");
+				inpkey = 0;
+			}
+			else input[n]='\0';
+		}
+	}
+	while(inpkey != 13);
+}
